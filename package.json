@@ -1,0 +1,18 @@
+{
+  "name": "mares-ooo",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "npm run build && vite preview",
+    "deploy": "npm run build && wrangler deploy"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.40.0",
+    "@cloudflare/workers-types": "^4.20260604.1",
+    "vite": "^8.0.16",
+    "wrangler": "^4.98.0"
+  }
+}
