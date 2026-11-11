@@ -2,8 +2,7 @@
 /// <reference types="@cloudflare/workers-types" />
 /// <reference types="vite/client" />
 
-import { withAuth } from "./auth.js";
-import { handlePing, handlePingAPI } from "./ping.js";
+import { handlePing } from "./ping.js";
 import { handleInitDB, handleExportDB, handleImportDB } from "./db.js";
 import { handleIndex } from "./render.js";
 
@@ -19,11 +18,8 @@ export default {
         const url = new URL(request.url);
         const path = url.pathname;
 
-        if (path === "/ping") {
-            // Temporary leave the old path while I update the device
-            return await withAuth(request, env, handlePing);
-        } else if (path === "/api/ping") {
-            return await handlePingAPI(request, env);
+        if (path === "/api/ping") {
+            return await handlePing(request, env);
         } else if (path === "/api/db/init") {
             return await handleInitDB(request, env);
         } else if (path === "/api/db/export") {

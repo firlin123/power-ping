@@ -17,17 +17,31 @@ import { isAuthorized } from "./auth.js";
 /**
  * Handle Ping from device
  *
+ * @param {Request} request
  * @param {AppEnv} env
- * @param {number} uptime
  * @returns {Promise<Response>}
  */
-export async function handlePing(env, uptime) {
+export async function handlePing(request, env) {
+    if (request.method !== "GET") {
+        return new Response("Method Not Allowed", { status: 405 });
+    }
+
+    if (!isAuthorized(request, env)) {
+        return new Response("Unauthorized", { status: 401 });
+    }
+
+    const url = new URL(request.url);
+    const uptime = Number(url.searchParams.get("uptime"));
+    if (Number.isNaN(uptime) || uptime < 0) {
+        return new Response("Invalid uptime", { status: 400 });
+    }
+
     // Current UNIX timestamp in seconds (float)
     const currTimeRaw = Date.now() / 1000;
     // Current UNIX timestamp in seconds (int)
     const currTime = Math.floor(currTimeRaw);
     // Boot time UNIX timestamp in seconds
-    const bootTime = Math.round(currTimeRaw - (typeof uptime === "number" && uptime >= 0 ? uptime : 0));
+    const bootTime = Math.round(currTimeRaw - uptime);
 
     // Fetch the latest range from the database
     /** @type {PPRange | null} */
@@ -63,30 +77,4 @@ export async function handlePing(env, uptime) {
         INSERT INTO ranges (start_time, end_time) VALUES (?, ?);
     `).bind(bootTime, currTime).run();
     return new Response("Ping created new range!", { status: 200 });
-}
-
-
-/**
- * Handle Database Initialization
- *
- * @param {Request} request
- * @param {AppEnv} env
- * @returns {Promise<Response>}
- */
-export async function handlePingAPI(request, env) {
-    if (request.method !== "GET") {
-        return new Response("Method Not Allowed", { status: 405 });
-    }
-
-    if (!isAuthorized(request, env)) {
-        return new Response("Unauthorized", { status: 401 });
-    }
-
-    const url = new URL(request.url);
-    const uptime = Number(url.searchParams.get("uptime"));
-    if (Number.isNaN(uptime) || uptime < 0) {
-        return new Response("Invalid uptime", { status: 400 });
-    }
-
-    return handlePing(env, uptime);
 }
