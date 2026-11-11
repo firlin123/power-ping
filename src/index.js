@@ -3,8 +3,8 @@
 /// <reference types="vite/client" />
 
 import { withAuth } from "./auth.js";
-import { handlePing } from "./ping.js";
-import { handleInitDb } from "./db.js";
+import { handlePing, handlePingAPI } from "./ping.js";
+import { handleInitDB, handleExportDB, handleImportDB } from "./db.js";
 import { handleIndex } from "./render.js";
 
 /**
@@ -20,9 +20,16 @@ export default {
         const path = url.pathname;
 
         if (path === "/ping") {
+            // Temporary leave the old path while I update the device
             return await withAuth(request, env, handlePing);
-        } else if (path === "/init-db") {
-            return await withAuth(request, env, handleInitDb);
+        } else if (path === "/api/ping") {
+            return await handlePingAPI(request, env);
+        } else if (path === "/api/db/init") {
+            return await handleInitDB(request, env);
+        } else if (path === "/api/db/export") {
+            return await handleExportDB(request, env);
+        } else if (path === "/api/db/import") {
+            return await handleImportDB(request, env);
         } else if (path === "/") {
             return await handleIndex(env);
         } else {

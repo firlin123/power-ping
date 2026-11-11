@@ -1,6 +1,8 @@
 // @ts-check
 /// <reference types="@cloudflare/workers-types" />
 
+import { isAuthorized } from "./auth.js";
+
 /**
  * @typedef {import("./index.js").AppEnv} AppEnv
  */
@@ -14,9 +16,9 @@
 
 /**
  * Handle Ping from device
- * 
- * @param {AppEnv} env 
- * @param {number} uptime 
+ *
+ * @param {AppEnv} env
+ * @param {number} uptime
  * @returns {Promise<Response>}
  */
 export async function handlePing(env, uptime) {
@@ -61,4 +63,30 @@ export async function handlePing(env, uptime) {
         INSERT INTO ranges (start_time, end_time) VALUES (?, ?);
     `).bind(bootTime, currTime).run();
     return new Response("Ping created new range!", { status: 200 });
+}
+
+
+/**
+ * Handle Database Initialization
+ *
+ * @param {Request} request
+ * @param {AppEnv} env
+ * @returns {Promise<Response>}
+ */
+export async function handlePingAPI(request, env) {
+    if (request.method !== "GET") {
+        return new Response("Method Not Allowed", { status: 405 });
+    }
+
+    if (!isAuthorized(request, env)) {
+        return new Response("Unauthorized", { status: 401 });
+    }
+
+    const url = new URL(request.url);
+    const uptime = Number(url.searchParams.get("uptime"));
+    if (Number.isNaN(uptime) || uptime < 0) {
+        return new Response("Invalid uptime", { status: 400 });
+    }
+
+    return handlePing(env, uptime);
 }

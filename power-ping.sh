@@ -2,9 +2,9 @@
 . /root/.cron-env.sh
 
 UPTIME=$(cut -d' ' -f1 /proc/uptime)
-PAYLOAD="{\"secret\":\"$SECRET_KEY\",\"uptime\":$UPTIME}"
+PARAMS='secret='"$SECRET_KEY"'&uptime='"$UPTIME"
 
-RESULT=$(wget --quiet --post-data="$PAYLOAD" "$SERVER_URL" -O-)
+RESULT=$(wget --quiet "$SERVER_URL/api/ping?$PARAMS" -O-)
 
 if [ $? -eq 0 ]; then
   echo "Ping sent successfully: $RESULT"
