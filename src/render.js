@@ -154,7 +154,7 @@ export async function handleIndex(env) {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Power Outage Calendar</title>
+    <title>Power Outage Monitor</title>
     <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
@@ -162,7 +162,7 @@ export async function handleIndex(env) {
         <!-- Header Card with Live Status -->
         <header class="header-card">
             <div class="header-title-group">
-                <h1>⚡ Power Outage Calendar</h1>
+                <h1>⚡ Power Outage Monitor</h1>
                 <p id="live-status-sub">Loading power monitoring timeline...</p>
             </div>
             <div id="live-status-badge" class="live-status-pill online">
@@ -195,7 +195,7 @@ export async function handleIndex(env) {
             </div>
         </section>
 
-        <!-- Calendar View Controls -->
+        <!-- Monitor View Controls -->
         <nav class="calendar-controls">
             <div class="view-switcher">
                 <button class="control-btn" data-view="day">☀️ Day</button>
@@ -228,9 +228,9 @@ export async function handleIndex(env) {
             </div>
         </nav>
 
-        <!-- Main Calendar View -->
+        <!-- Main Monitor View -->
         <main class="calendar-container" id="calendar-view">
-            <p style="text-align: center; color: var(--text-muted); padding: 40px;">Rendering calendar view...</p>
+            <p style="text-align: center; color: var(--text-muted); padding: 40px;">Rendering monitor view...</p>
         </main>
 
         <!-- Raw Data Table (Collapsed) -->
