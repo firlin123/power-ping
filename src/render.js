@@ -222,8 +222,8 @@ export async function handleIndex(env) {
                     <span>Power On</span>
                 </div>
                 <div class="legend-item">
-                    <span class="legend-swatch now-line"></span>
-                    <span>Now</span>
+                    <span class="legend-swatch now-line" id="legend-swatch-now"></span>
+                    <span id="legend-text-now">Now</span>
                 </div>
             </div>
         </nav>

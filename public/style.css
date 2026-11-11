@@ -286,6 +286,13 @@ body {
     background-color: var(--accent-now);
 }
 
+.legend-swatch.today-box {
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--accent-blue);
+    background-color: transparent;
+}
+
 /* Calendar View Container */
 .calendar-container {
     background: var(--bg-card);

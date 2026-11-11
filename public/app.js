@@ -164,6 +164,8 @@
     const statDuration = document.getElementById("stat-duration");
     const statAvailability = document.getElementById("stat-availability");
     const tooltipEl = document.getElementById("calendar-tooltip");
+    const legendSwatchNow = document.getElementById("legend-swatch-now");
+    const legendTextNow = document.getElementById("legend-text-now");
 
     // Tooltip listeners
     function showTooltip(e, htmlContent) {
@@ -772,7 +774,19 @@
         document.addEventListener("click", hideTooltip);
     }
 
+    function updateLegend(view) {
+        if (!legendSwatchNow || !legendTextNow) return;
+        if (view === "month" || view === "year") {
+            legendSwatchNow.className = "legend-swatch today-box";
+            legendTextNow.textContent = "Today";
+        } else {
+            legendSwatchNow.className = "legend-swatch now-line";
+            legendTextNow.textContent = "Now";
+        }
+    }
+
     function renderCurrentView() {
+        updateLegend(currentView);
         if (currentView === "day") {
             renderDayView();
         } else if (currentView === "week") {
@@ -790,6 +804,7 @@
         document.querySelectorAll(".view-switcher .control-btn").forEach(btn => {
             btn.classList.toggle("active", btn.getAttribute("data-view") === view);
         });
+        updateLegend(view);
         renderCurrentView();
     }
 
